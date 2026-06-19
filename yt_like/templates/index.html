@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perspy - Share & Watch Content</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark-mode"> <!-- Default theme is dark-mode (black/teal) -->
+
+    <!-- BACKGROUND GRAPHICS FOR PREMIUM AESTHETIC -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app-container">
+
+        <!-- AUTH OVERLAY / LOGIN PAGE -->
+        <div id="auth-page" class="auth-overlay hidden">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="logo">
+                        <i class="fa-solid fa-water-wave logo-icon"></i>
+                        <span>Pers<span>py</span></span>
+                    </div>
+                    <h2>Enter the Flow</h2>
+                    <p>Login or register instantly with your email ID</p>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email-input">Email Address</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-envelope input-icon"></i>
+                            <input type="email" id="email-input" placeholder="you@domain.com" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-glow">
+                        <span>Sign In / Create Account</span>
+                        <i class="fa-solid fa-arrow-right-to-bracket btn-icon"></i>
+                    </button>
+                </form>
+                <div class="auth-footer">
+                    <p>No password needed! We will set up your session instantly.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HEADER NAVIGATION -->
+        <header id="main-header">
+            <div class="header-left">
+                <button id="sidebar-toggle" class="icon-btn" aria-label="Toggle Sidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="logo" id="header-logo-btn">
+                    <i class="fa-solid fa-play logo-icon teal-pulse"></i>
+                    <span>Pers<span class="teal-text">py</span></span>
+                </div>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search creators, videos, tags...">
+                    <button id="clear-search" class="hidden"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <!-- DARK / LIGHT SWITCH -->
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon theme-icon-dark"></i>
+                    <i class="fa-solid fa-sun theme-icon-light hidden"></i>
+                </button>
+
+                <!-- NEW POST BUTTON -->
+                <button id="create-post-btn" class="btn btn-primary btn-sm hidden">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Post</span>
+                </button>
+
+                <!-- PROFILE BUTTON -->
+                <div id="profile-container" class="hidden">
+                    <button id="profile-menu-btn" class="profile-btn">
+                        <div class="avatar-circle" id="user-avatar-char">U</div>
+                        <span id="user-display-name">Username</span>
+                        <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                    </button>
+                    <!-- DROPDOWN -->
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header">
+                            <span id="dropdown-email">user@perspy.com</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <button id="create-channel-dropdown-btn" class="dropdown-item hidden">
+                            <i class="fa-solid fa-square-plus"></i>
+                            <span>Create Channel</span>
+                        </button>
+                        <button id="my-channel-dropdown-btn" class="dropdown-item hidden">
+                            <i class="fa-solid fa-user-gear"></i>
+                            <span>Channel Studio</span>
+                        </button>
+                        <div id="channel-dropdown-divider" class="dropdown-divider hidden"></div>
+                        <button id="logout-btn" class="dropdown-item text-danger">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LOGIN TRIGGER IF NOT LOGGED IN -->
+                <button id="login-trigger-btn" class="btn btn-outline btn-sm">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Login</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- LAYOUT WRAPPER (SIDEBAR + MAIN CONTENT) -->
+        <div class="layout-body">
+            
+            <!-- SIDEBAR -->
+            <aside id="sidebar">
+                <nav class="sidebar-nav">
+                    <!-- MODE FILTER TABS -->
+                    <div class="nav-section-title">Feed Filter Mode</div>
+                    <button class="nav-link active" data-mode="all">
+                        <i class="fa-solid fa-compass"></i>
+                        <span>All Content</span>
+                    </button>
+                    <button class="nav-link" data-mode="long">
+                        <i class="fa-solid fa-clapperboard"></i>
+                        <span>Long Videos</span>
+                    </button>
+                    <button class="nav-link" data-mode="short">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Short Reels</span>
+                    </button>
+                    <button class="nav-link" data-mode="subscribed" id="subscriptions-link">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Subscriptions</span>
+                    </button>
+
+                    <div class="nav-divider"></div>
+
+                    <!-- CHANNELS SECTION -->
+                    <div class="nav-section-title">Subscriptions</div>
+                    <div id="subscribed-channels-list" class="channels-sidebar-list">
+                        <div class="sidebar-no-channels">Log in to view channels</div>
+                    </div>
+
+                    <div class="nav-divider"></div>
+
+                    <!-- USER SPACE -->
+                    <div class="nav-section-title">Your Studio</div>
+                    <button class="nav-link" id="my-posts-link">
+                        <i class="fa-solid fa-photo-film"></i>
+                        <span>My Uploads</span>
+                    </button>
+                    <button class="nav-link hidden" id="create-channel-nav-link">
+                        <i class="fa-solid fa-square-plus"></i>
+                        <span>Create Channel</span>
+                    </button>
+                    <button class="nav-link hidden" id="my-channel-nav-link">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Channel Studio</span>
+                    </button>
+                </nav>
+                <div class="sidebar-footer">
+                    <p>&copy; 2026 Perspy Inc.</p>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <main id="main-content">
+                <!-- FLOATING FILTER BAR (Visible in All Mode) -->
+                <div id="filter-bar" class="filter-bar-container">
+                    <button class="filter-pill active" data-filter="all">All Feed</button>
+                    <button class="filter-pill" data-filter="long">
+                        <i class="fa-solid fa-video icon-gap"></i>Long Form
+                    </button>
+                    <button class="filter-pill" data-filter="short">
+                        <i class="fa-solid fa-mobile-screen icon-gap"></i>Short Form
+                    </button>
+                    <button class="filter-pill" data-filter="text">
+                        <i class="fa-solid fa-quote-left icon-gap"></i>Text Only
+                    </button>
+                </div>
+
+                <!-- RENDERED FEED WRAPPERS -->
+                
+                <!-- 1. GRID/LIST FEED CONTAINER (for All/Long/Text feeds) -->
+                <div id="feed-container" class="feed-grid">
+                    <!-- Cards will be dynamically injected here -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Entering the flow...</p>
+                    </div>
+                </div>
+
+                <!-- 2. SHORTS TIKTOK-LIKE CONTAINER (for Short-Form only Mode) -->
+                <div id="shorts-reels-container" class="shorts-reels-wrapper hidden">
+                    <div class="reels-slider">
+                        <!-- Short videos will render as vertical full-height sliders -->
+                        <div class="reel-viewport">
+                            <div class="reel-inner" id="reel-container">
+                                <!-- Dynamic vertical reels loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Navigation arrows for desktop shorts -->
+                    <div class="shorts-nav-buttons">
+                        <button id="short-prev-btn" class="nav-arrow" title="Previous Short">
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </button>
+                        <button id="short-next-btn" class="nav-arrow" title="Next Short">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. CHANNEL STUDIO CONTAINER (initially hidden) -->
+                <div id="channel-studio-container" class="studio-wrapper hidden">
+                    <!-- Channel Studio Header -->
+                    <div class="studio-header-card">
+                        <div class="studio-banner-container" id="studio-banner">
+                            <!-- Banner Image or Gradient Placeholder loaded here -->
+                        </div>
+                        <div class="studio-profile-row">
+                            <div class="studio-avatar-wrapper" id="studio-avatar-img">
+                                <!-- Avatar custom image or circle loaded here -->
+                            </div>
+                            <div class="studio-profile-info">
+                                <h2 id="studio-channel-name">Channel Name</h2>
+                                <p id="studio-subscriber-count">0 subscribers</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Studio Tabs Navigation -->
+                        <div class="studio-tabs">
+                            <button class="studio-tab active" data-tab="feed">
+                                <i class="fa-solid fa-table-cells"></i>
+                                <span>Feed</span>
+                            </button>
+                            <button class="studio-tab" data-tab="analytics">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span>Performance Analytics</span>
+                            </button>
+                            <button class="studio-tab" data-tab="customize">
+                                <i class="fa-solid fa-sliders"></i>
+                                <span>Customize Channel</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Studio Tab Contents -->
+                    <div class="studio-tab-content">
+                        <!-- A. Studio Feed -->
+                        <div id="studio-tab-feed" class="studio-panel">
+                            <div id="studio-feed-container" class="feed-grid">
+                                <!-- Cards will be loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- B. Performance Analytics Panel -->
+                        <div id="studio-tab-analytics" class="studio-panel hidden">
+                            <!-- Summary Cards Grid -->
+                            <div class="analytics-summary-grid">
+                                <div class="analytics-card">
+                                    <div class="analytics-card-icon"><i class="fa-solid fa-users"></i></div>
+                                    <div class="analytics-card-info">
+                                        <span class="analytics-label">Subscribers</span>
+                                        <h3 class="analytics-val" id="analytics-subscribers">0</h3>
+                                    </div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-card-icon"><i class="fa-solid fa-eye"></i></div>
+                                    <div class="analytics-card-info">
+                                        <span class="analytics-label">Total Views</span>
+                                        <h3 class="analytics-val" id="analytics-views">0</h3>
+                                    </div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-card-icon"><i class="fa-solid fa-thumbs-up"></i></div>
+                                    <div class="analytics-card-info">
+                                        <span class="analytics-label">Total Likes</span>
+                                        <h3 class="analytics-val" id="analytics-likes">0</h3>
+                                    </div>
+                                </div>
+                                <div class="analytics-card">
+                                    <div class="analytics-card-icon"><i class="fa-solid fa-comment"></i></div>
+                                    <div class="analytics-card-info">
+                                        <span class="analytics-label">Total Comments</span>
+                                        <h3 class="analytics-val" id="analytics-comments">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Posts Analytics Table -->
+                            <div class="analytics-table-card">
+                                <div class="analytics-table-header">
+                                    <h4>Content Performance Breakdown</h4>
+                                </div>
+                                <div class="analytics-table-wrapper">
+                                    <table class="analytics-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Content Title / Details</th>
+                                                <th>Type</th>
+                                                <th>Views</th>
+                                                <th>Likes</th>
+                                                <th>Comments</th>
+                                                <th>Published Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="analytics-table-body">
+                                            <!-- dynamic rows loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- C. Customize Channel Panel -->
+                        <div id="studio-tab-customize" class="studio-panel hidden">
+                            <form id="customize-channel-form" class="studio-form-card">
+                                <div class="form-group">
+                                    <label for="customize-name">Channel Name *</label>
+                                    <input type="text" id="customize-name" required placeholder="Your Channel Name" style="padding-left:14px;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="customize-description">Channel Description</label>
+                                    <textarea id="customize-description" rows="4" placeholder="Tell viewers what your channel is about..."></textarea>
+                                </div>
+                                
+                                <div class="customize-file-row">
+                                    <div class="form-group">
+                                        <label for="customize-avatar">Update Profile Image (Logo)</label>
+                                        <input type="file" id="customize-avatar" accept="image/*">
+                                        <span class="upload-hint">Square format works best.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customize-banner">Update Header Banner Image</label>
+                                        <input type="file" id="customize-banner" accept="image/*">
+                                        <span class="upload-hint">Recommended ratio 5:1 (1200x240).</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions-end">
+                                    <button type="submit" class="btn btn-primary btn-glow">
+                                        <span>Save Changes</span>
+                                        <i class="fa-solid fa-floppy-disk btn-icon"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- CREATE NEW POST MODAL -->
+        <div id="create-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3>Create New Post</h3>
+                    <button id="close-modal-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Post Type Selector Tab -->
+                    <div class="post-type-selector">
+                        <button class="type-tab active" data-type="long">
+                            <i class="fa-solid fa-video"></i>
+                            <span>Long Video</span>
+                        </button>
+                        <button class="type-tab" data-type="short">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            <span>Short Reel</span>
+                        </button>
+                        <button class="type-tab" data-type="text">
+                            <i class="fa-solid fa-quote-right"></i>
+                            <span>Text Post</span>
+                        </button>
+                    </div>
+
+                    <!-- Post Creation Form -->
+                    <form id="create-post-form">
+                        <input type="hidden" id="post-type-input" value="long">
+
+                        <!-- Title Field (Video Only) -->
+                        <div class="form-group" id="title-field-group">
+                            <label for="post-title">Title *</label>
+                            <input type="text" id="post-title" placeholder="Give your content an amazing title..." required>
+                        </div>
+
+                        <!-- Description/Content Field -->
+                        <div class="form-group">
+                            <label for="post-content" id="content-label-text">Description</label>
+                            <textarea id="post-content" rows="4" placeholder="Tell us more about this content..."></textarea>
+                        </div>
+
+                        <!-- Video Upload/URL Field (Video Only) -->
+                        <div class="form-group" id="media-field-group">
+                            <label>Video Resource *</label>
+                            <div class="resource-selector-tabs">
+                                <button type="button" class="resource-tab active" id="tab-upload">Upload Video File</button>
+                                <button type="button" class="resource-tab" id="tab-url">Video Link / URL</button>
+                            </div>
+
+                            <!-- File Uploader Container -->
+                            <div id="video-file-container" class="upload-dropzone">
+                                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                <p>Drag & drop video file or click to browse</p>
+                                <span class="upload-hint">Supports MP4, WebM (Max 50MB)</span>
+                                <input type="file" id="post-file-input" accept="video/mp4,video/webm,video/ogg">
+                                <div id="selected-file-name" class="hidden"></div>
+                            </div>
+
+                            <!-- URL Input Container -->
+                            <div id="video-url-container" class="hidden">
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-link input-icon"></i>
+                                    <input type="url" id="post-media-url" placeholder="https://example.com/stream.mp4">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Optional Thumbnail Upload -->
+                        <div class="form-group" id="thumbnail-field-group">
+                            <label for="post-thumbnail">Video Cover / Thumbnail (Optional)</label>
+                            <input type="file" id="post-thumbnail" accept="image/*">
+                        </div>
+
+                        <!-- Upload progress bar -->
+                        <div id="upload-progress-container" class="progress-bar-wrapper hidden">
+                            <div class="progress-labels">
+                                <span>Uploading files...</span>
+                                <span id="progress-percent">0%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div id="progress-bar" class="progress-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" id="cancel-post-btn" class="btn btn-outline">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-glow">
+                                <span>Post to Feed</span>
+                                <i class="fa-solid fa-paper-plane btn-icon"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- CREATE CHANNEL MODAL -->
+        <div id="create-channel-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3>Create Your Perspy Channel</h3>
+                    <button id="close-channel-modal-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-subtext">Set up your Perspy creator channel before posting or managing content.</p>
+                    <form id="create-channel-form">
+                        <!-- Channel Name -->
+                        <div class="form-group">
+                            <label for="channel-name-input">Channel Name *</label>
+                            <input type="text" id="channel-name-input" placeholder="e.g. Neon Horizon" required style="padding-left:14px;">
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="channel-description-input">Description</label>
+                            <textarea id="channel-description-input" rows="3" placeholder="Tell viewers what your channel is about..."></textarea>
+                        </div>
+
+                        <!-- Avatar Upload -->
+                        <div class="form-group">
+                            <label for="channel-avatar-input">Channel Avatar / Profile Picture</label>
+                            <input type="file" id="channel-avatar-input" accept="image/*">
+                            <div class="upload-hint">Upload a custom square image for your channel.</div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" id="cancel-channel-btn" class="btn btn-outline">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-glow">
+                                <span>Create Channel</span>
+                                <i class="fa-solid fa-square-plus btn-icon"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMMENTS DRAWER (Slides in from the right) -->
+        <div id="comment-drawer" class="drawer-overlay hidden">
+            <div class="drawer-card">
+                <div class="drawer-header">
+                    <h3>Comments (<span id="drawer-comment-count">0</span>)</h3>
+                    <button id="close-drawer-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="drawer-body">
+                    <!-- Comments List -->
+                    <div id="comments-list" class="comments-flow">
+                        <!-- comments load here -->
+                    </div>
+                </div>
+                <div class="drawer-footer">
+                    <form id="comment-form">
+                        <input type="hidden" id="comment-post-id">
+                        <div class="comment-input-row">
+                            <input type="text" id="comment-input" placeholder="Join the discussion..." required>
+                            <button type="submit" class="btn btn-primary btn-icon-only" title="Post Comment">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MAIN APP SCRIPT -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
